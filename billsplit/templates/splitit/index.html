@@ -1,0 +1,79 @@
+{% extends "splitit/base.html" %}
+
+{% block content %}
+<div class="container">
+	<ul class="nav nav-tabs">
+	  <li class="active"><a data-toggle="tab" href="#home">You owe someone</a></li>
+	  <li><a data-toggle="tab" href="#menu1">Someone owe you</a></li>
+	  <li><a data-toggle="tab" href="#menu2">Request for settlement</a></li>
+	  <li><a data-toggle="tab" href="#menu3">Settled transactions</a></li>
+	</ul>
+
+	<div class="tab-content">
+	  <div id="home" class="tab-pane fade in active">
+	  	{% if transactionsBorrow %}
+		  	{% for transactionBorrow in transactionsBorrow %}
+		    <div class="panel panel-default youOwePannel">
+	  			<div class="panel-body">you owe {{transactionBorrow.lender.username}} <i class="fa fa-rupee"></i>{{transactionBorrow.amount|floatformat:2}} <a href="#" onclick="settlerequest({{transactionBorrow.id}})">Settle</a></div>
+			</div>
+			{% endfor %}
+		{% else %}
+			<div class="panel panel-default youOwePannel">
+	  			<div class="panel-body">You don't owe to anyone. Enjoy:)</div>
+			</div>
+		{% endif %}
+	  </div>
+	  <div id="menu1" class="tab-pane fade">
+	  	{% if transactionsLend %}
+		    {% for transactionLend in transactionsLend %}
+		    <div class="panel panel-default someoneOwePannel">
+	  			<div class="panel-body">{{transactionLend.borrower.username}} ows you <i class="fa fa-rupee"></i>{{transactionLend.amount|floatformat:2}} <a href="#" onclick="settlerequest({{transactionLend.id}})">Settle</a></div>
+			</div>
+			{% endfor %}
+		{% else %}
+			<div class="panel panel-default someoneOwePannel">
+	  			<div class="panel-body">No one owes you.</div>
+			</div>
+		{% endif %}
+	  </div>
+	  <div id="menu2" class="tab-pane fade">
+	    {% if requestedToUser %}
+		    {% for request in requestedToUser %}
+		    	{% if request.requester == request.transaction.borrower %}
+		    	<div class="panel panel-default youOwePannel">
+	  				<div class="panel-body">{{ request.requester.username }} requested to settle amount <i class="fa fa-rupee"></i>{{ request.transaction.amount|floatformat:2 }} that was borrowed by {{ request.requester.username }}. <a href="#" onclick='settle({{request.id}}, {{request.transaction.id}})'>Settle</a></div>
+		    	</div>
+		    	{% else %}
+		    	<div class="panel panel-default someoneOwePannel">
+	  				<div class="panel-body">{{ request.requester.username }} requested to settle amount <i class="fa fa-rupee"></i>{{ request.transaction.amount|floatformat:2 }} that was borrowed by you. <a href="#" onclick='settle({{request.id}}, {{request.transaction.id}})'>Settle</a></div>
+		    	</div>
+		    	{% endif %}
+			{% endfor %}
+		{% else %}
+			<div class="panel panel-default someoneOwePannel">
+	  			<div class="panel-body">No Requests :)</div>
+			</div>
+		{% endif %}
+	  </div>
+	  <div id="menu3" class="tab-pane fade">
+	   	{% if setteledTransactions %}
+	    	{% for settledTransaction in setteledTransactions %}
+		    	{% if settledTransaction.borrower == request.user %}
+		    	<div class="panel panel-default youOwePannel">
+	  				<div class="panel-body">Settled transaction of amount <i class="fa fa-rupee"></i>{{settledTransaction.amount|floatformat:2}} that you owed to {{settledTransaction.lender.username}}.</div>
+		    	</div>
+		    	{% else %}
+		    	<div class="panel panel-default someoneOwePannel">
+	  				<div class="panel-body">Settled transaction of amount <i class="fa fa-rupee"></i>{{settledTransaction.amount|floatformat:2}} that {{settledTransaction.borrower.username}} owed to you.</div>
+		    	</div>
+		    	{% endif %}
+			{% endfor %}
+		{% else %}
+			<div class="panel panel-default someoneOwePannel">
+	  			<div class="panel-body">No Settled Transactions :)</div>
+			</div>
+		{% endif %}
+	  </div>
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "splitit/base.html" %}
+
+{% block content %}
+<div class="container">
+	<div class="container">
+		<div class="row">
+			<div class="col-xl-12">
+				<h3>Select Group</h3>
+				{% for group in groups %}
+				<div class="panel panel-primary grpPannel" id="groupPannel{{group.id}}">
+					<div class="panel-heading">{{group.groupName}}</div>
+			      	<div class="panel-body">Total Members: {{group.members}}</div>
+			      	<div class="panel-body"><button class="btn btn-default" onclick="location.href='/splitit/addbill/{{group.id}}/'">Select</button></div>
+			    </div>
+			    {% endfor %}
+			</div>
+		</div>
+	</div>
+
+</div>
+{% endblock %}

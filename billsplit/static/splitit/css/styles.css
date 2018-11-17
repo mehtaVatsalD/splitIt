@@ -1,0 +1,13 @@
+.btn{
+	margin: 5px;
+}
+
+.youOwePannel{
+	margin: 10px;
+	color: red;
+}
+
+.someoneOwePannel{
+	margin: 10px;
+	color: green;
+}

@@ -1,0 +1,64 @@
+{% extends "splitit/base.html" %}
+
+{% block content %}
+<div class="container">
+	<form class="form-horizontal" method="POST" action="">
+		{% csrf_token %}
+	  <div class="form-group">
+	    <label class="control-label col-sm-2" for="title">Title:</label>
+	    <div class="col-sm-10">
+	      <input type="text" class="form-control" name="title" id="titleTransaction" placeholder="Enter Bill Title">
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="control-label col-sm-2" for="paidby">Paid By:</label>
+	    <div class="col-sm-10">
+	      <select class="form-control" name="paidby">
+	      	{% for user in usersingrp %}
+	    	<option value="{{user.id}}">{{user.username}}</option>
+	    	{% endfor %}
+	      </select>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="control-label col-sm-2" for="amount">Amount:</label>
+	    <div class="col-sm-10">
+	      <input type="number" min="0" class="form-control" name="amount" id="amountTransaction" placeholder="Enter Amount">
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="control-label col-sm-2" for="amount">Share Between:</label>
+	    {% for user in usersingrp %}
+	    <label class="checkbox-inline"><input type="checkbox" name="shrUsr" value="{{user.id}}">{{user.username}}</label>
+	    {% endfor %}
+	  </div>
+	  <div class="form-group"> 
+	    <div class="col-sm-offset-2 col-sm-10">
+	      <button type="submit" class="btn btn-default">Submit</button>
+	    </div>
+	  </div>
+	</form>
+	<div class="row">
+		<div class="col-xl-12">
+			<h3>All Bills</h3>
+			{% if bills%}
+			{% for bill in bills %}
+			<div class="panel panel-primary grpPannel">
+				<div class="panel-heading">{{bill.bill.title}}</div>
+		      	<div class="panel-body"><strong>Creator:</strong> {{bill.bill.creator}}</div>
+		      	<div class="panel-body"><strong>Paid By:</strong> {{bill.bill.paidBy}}</div>
+		      	<div class="panel-body"><strong>Amount:</strong> {{bill.bill.amount}}</div>
+		      	<div class="panel-body"><strong>Shared By:</strong> 
+		      		<ul>{% for sharer in bill.sharers %}<li>{{sharer.user.username}}</li>{% endfor %}</ul> 
+		      	</div>
+		    </div>
+		    {% endfor %}
+			{% else %}
+			<div class="jumbotron">
+    			<h1>No bills Added :(</h1>  
+			</div>
+		    {% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}

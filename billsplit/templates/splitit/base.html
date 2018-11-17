@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>splitit App</title>
+	{% load static %}
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="{% static 'splitit/css/styles.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'splitit/css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'splitit/fonts/css/font-awesome.min.css' %}">
+	<!-- <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" /> -->
+	<script type="text/javascript" src="{% static 'splitit/jquery/jquery-3.2.1.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'splitit/jquery/jquery-ui.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'splitit/js/bootstrap.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'splitit/js/custom.js' %}"></script>
+	<style type="text/css">
+		html, body{
+		height: 100%;
+		}
+
+		.mainBody{
+			min-height: calc(100vh - 155px);
+		}
+
+		footer{
+			height: 60px;
+		}
+
+		.appTitle{
+			text-align: center;
+		}
+	</style>
+
+	{% block head %}
+	{% endblock %}
+	
+</head>
+<body>
+	{% include "splitit/includes/header.html" %}
+	
+	<div class="mainBody">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12">
+				{% if messages %}
+					{% for message in messages %}
+						{% if message.tags == 'error' %}
+						<div class="alert alert-danger">
+			  				<strong>Error!</strong> {{message}}
+						</div>
+						{% elif message.tags == 'success' %}
+						<div class="alert alert-success">
+			  				<strong>Success!</strong> {{message}}
+						</div>
+						{% endif %}
+					{% endfor %}
+				{% endif %}	
+				</div>
+			</div>
+		</div>
+				
+		{% block content %}
+		{% endblock %}
+	</div>
+
+	<footer class="footer">
+		<hr>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-xs-12" style="text-align: center;" >&copy; 2018 CopyLeft</div>
+			</div>
+		</div>
+	</footer>
+
+</body>
+</html>
